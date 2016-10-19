@@ -1,0 +1,258 @@
+package View;
+
+import java.awt.EventQueue;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EmptyBorder;
+
+import Model.Conexao;
+
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.Toolkit;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.awt.event.ActionEvent;
+
+public class CadastroSala extends JFrame {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	Conexao conexao = null;
+	private JPanel contentPane;
+	private JTextField textFieldNSala;
+	private JTextField textFielBloco;
+	private JLabel lblNomeDaSala;
+	private JLabel lblBloco;
+	private JLabel lblCodigo;
+	private JLabel lblTipo;
+	private JLabel lblMarca;
+	private JTextField textFieldNDoSensor1;
+	private JTextField textFieldNDoSensor2;
+	private JTextField textFieldNDoSensor3;
+	private JButton btnCadastrar;
+	private JButton btn_sair;
+	private Connection con;
+	private PreparedStatement prs;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					CadastroSala frame = new CadastroSala();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public CadastroSala() {
+
+		super("Nova sala ");
+		//conexao();
+
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 685, 463);
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(153, 255, 153));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		textFieldNSala = new JTextField();
+		textFieldNSala.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		textFieldNSala.setBounds(325, 33, 78, 33);
+		textFieldNSala.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 153, 51), new Color(0, 153, 51),
+				new Color(0, 153, 51), new Color(0, 153, 51)));
+		textFieldNSala.setColumns(10);
+		contentPane.add(textFieldNSala);
+
+		textFielBloco = new JTextField();
+		textFielBloco.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		textFielBloco.setColumns(10);
+		textFielBloco.setBounds(325, 83, 78, 33);
+		textFielBloco.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 153, 51), new Color(0, 153, 51),
+				new Color(0, 153, 51), new Color(0, 153, 51)));
+		contentPane.add(textFielBloco);
+
+		lblNomeDaSala = new JLabel("Numero Da Sala :");
+		lblNomeDaSala.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNomeDaSala.setBounds(186, 34, 129, 33);
+		contentPane.add(lblNomeDaSala);
+
+		lblBloco = new JLabel("Bloco :");
+		lblBloco.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblBloco.setBounds(186, 83, 129, 33);
+		contentPane.add(lblBloco);
+
+		lblCodigo = new JLabel("N\u00B0 do sensor 2 :");
+		lblCodigo.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblCodigo.setBounds(186, 173, 129, 33);
+		contentPane.add(lblCodigo);
+
+		lblTipo = new JLabel("N\u00B0 do sensor 1 :");
+		lblTipo.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblTipo.setBounds(186, 128, 129, 33);
+		contentPane.add(lblTipo);
+
+		lblMarca = new JLabel("N\u00B0 do sensor 3 :");
+		lblMarca.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblMarca.setBounds(186, 217, 129, 33);
+		contentPane.add(lblMarca);
+
+		textFieldNDoSensor1 = new JTextField();
+		textFieldNDoSensor1.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		textFieldNDoSensor1.setBounds(325, 127, 260, 33);
+		textFieldNDoSensor1.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 153, 51), new Color(0, 153, 51),
+				new Color(0, 153, 51), new Color(0, 153, 51)));
+		textFieldNDoSensor1.setColumns(10);
+		contentPane.add(textFieldNDoSensor1);
+
+		textFieldNDoSensor2 = new JTextField();
+		textFieldNDoSensor2.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		textFieldNDoSensor2.setBounds(325, 172, 260, 33);
+		textFieldNDoSensor2.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 153, 51), new Color(0, 153, 51),
+				new Color(0, 153, 51), new Color(0, 153, 51)));
+		textFieldNDoSensor2.setColumns(10);
+		contentPane.add(textFieldNDoSensor2);
+
+		textFieldNDoSensor3 = new JTextField();
+		textFieldNDoSensor3.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		textFieldNDoSensor3.setBounds(325, 217, 260, 33);
+		textFieldNDoSensor3.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 153, 51), new Color(0, 153, 51),
+				new Color(0, 153, 51), new Color(0, 153, 51)));
+		textFieldNDoSensor3.setColumns(10);
+		contentPane.add(textFieldNDoSensor3);
+
+		btnCadastrar = new JButton("Cadastrar ");
+		btnCadastrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnCadastrarAction(e);
+			}
+		});
+		btnCadastrar.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnCadastrar.setBackground(new Color(0, 153, 51));
+		btnCadastrar.setBounds(186, 299, 152, 52);
+		btnCadastrar.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 153, 51), new Color(0, 153, 51),
+				new Color(0, 153, 51), new Color(0, 153, 51)));
+		contentPane.add(btnCadastrar);
+
+		btn_sair = new JButton("Sair");
+		btn_sair.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				btn_sairAction(evt);
+			}
+		});
+		btn_sair.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btn_sair.setBackground(new Color(0, 153, 51));
+		btn_sair.setBounds(433, 299, 152, 52);
+		btn_sair.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 153, 51), new Color(0, 153, 51),
+				new Color(0, 153, 51), new Color(0, 153, 51)));
+		contentPane.add(btn_sair);
+
+		JLabel nivel_de_acesso = new JLabel();
+		nivel_de_acesso.setBounds(10, 33, 166, 147);
+		ImageIcon icon_nivel = new ImageIcon(getClass().getResource("imgs/numero3.jpg"));
+		Image imgem = icon_nivel.getImage().getScaledInstance(nivel_de_acesso.getWidth(), nivel_de_acesso.getHeight(),
+				Image.SCALE_DEFAULT);
+		nivel_de_acesso.setIcon(new ImageIcon(imgem));
+		nivel_de_acesso.setToolTipText("NIVEL DE ACESSO, PROGRAMADOR !");
+		nivel_de_acesso.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 153, 51), new Color(0, 153, 51),
+				new Color(0, 153, 51), new Color(0, 153, 51)));
+		contentPane.add(nivel_de_acesso);
+
+		java.net.URL url = this.getClass().getResource("imgs/Logo_1.png");
+		Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);
+		this.setIconImage(iconeTitulo);
+		setLocationRelativeTo(null);
+
+	}
+
+	private void conexao() {
+		con = conexao.getConnetion();
+		
+
+	}
+
+	protected void btnCadastrarAction(ActionEvent e) {
+		cadastrarSalas();
+
+	}
+
+	private void cadastrarSalas() {
+		try {
+			String sql = "INSERT INTO \"Salas\" (\"N° da sala\", \"Bloco\") VALUES( " + textFieldNSala.getText() + ", '"
+					+ textFielBloco.getText() + "')";
+
+			prs = con.prepareStatement(sql);
+			prs.executeUpdate();
+			prs.close();
+
+		} catch (SQLException e) {
+
+			try {
+				prs.close();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}
+		try {
+			String SQL = "INSERT INTO \"Ar Condicionado\" (\"Temperatura\") VALUES(0)";
+
+			prs = con.prepareStatement(SQL);
+			prs.executeUpdate();
+			prs.close();
+
+			String sql = "INSERT INTO \"Sensores\" (\"N° do sensor\", \"N° do sensor 2\", \"N° do sensor 3\") VALUES( "
+					+ textFieldNDoSensor1.getText() + ", " + textFieldNDoSensor2.getText() + ", "
+					+ textFieldNDoSensor3.getText() + " )";
+
+			prs = con.prepareStatement(sql);
+			prs.executeUpdate();
+
+			JOptionPane.showMessageDialog(null, "Sala cadastrada com sucesso!");
+			prs.close();
+
+		} catch (SQLException e) {
+
+			JOptionPane.showMessageDialog(null, "Não foi possível cadastrar sala ! \n" + e);
+		}
+
+	}
+
+	protected void btn_sairAction(ActionEvent evt) {
+		sair();
+	}
+
+	private void sair() {
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		dispose();
+
+	}
+}
