@@ -153,9 +153,7 @@ public class TelaDeCadastramentoUsuario extends JFrame {
 	private void cadastraUsuario(Conexao conexao) {
 		int nivel = Integer.parseInt(choice.getSelectedItem());
 		try {
-			String sql = "INSERT INTO \"Usuários\" (\"Nome\",\"Login\",\"Senha\",\"Nível de acesso\") VALUES('"
-					+ textFieldNome.getText() + "', '" + textFieldLogin.getText() + "', '"
-					+ String.valueOf(passwordFieldSenha.getPassword()) + "', '" + nivel + "')";
+			String sql = "INSERT INTO usuarios(nome,login,senha,nivel_acesso) VALUES('"+textFieldNome.getText()+"','"+textFieldLogin.getText()+"','"+String.valueOf(passwordFieldSenha.getPassword())+"','"+nivel+"')";
 
 			conexao.executeSql(sql);
 			JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");

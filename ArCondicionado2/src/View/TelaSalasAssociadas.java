@@ -713,10 +713,7 @@ public class TelaSalasAssociadas extends JFrame {
 
 	private void atualizarTabelaDoAr(Conexao conexao) {
 		try {
-			String sql = "SELECT \"ID_Sala\",\"N° da sala\",\"Bloco\",\"Temperatura\", \"Auto Blowing\", \"Turbo\",\"Ventilação\" "
-					+ "FROM \"Salas\",\"Ar Condicionado\", \"AssociadosAsSalas\" "
-					+ "WHERE \"ID_Ar\" = \"ID_Sala\" AND \"ID_Sala\" = \"ID_SalaPK\" AND \"ID_UsuárioPK\" ="
-					+ TelaDeLogin.getid();
+			String sql = "SELECT id_sala,numero_sala,bloco,temperatura,auto_blowing,turbo,ventilacao FROM salas,ar_condicionado,associadosassalas WHERE id_ar = id_sala AND id_sala = id_salapk";
 
 			rs = conexao.executeSql(sql);
 			table.setModel(DbUtils.resultSetToTableModel(rs));

@@ -81,7 +81,7 @@ public class TelaDeAssociacao extends JFrame {
     public TelaDeAssociacao() {
         super(" Associamento ");
         setIconImage(Toolkit.getDefaultToolkit()
-                .getImage(TelaDeAssociacao.class.getResource("/ArCondicionado/view/imgs\u00E7a/Logo_1.png")));
+                .getImage(TelaDeAssociacao.class.getResource("/view/imgs/Logo_1.png")));
         Conexao conexao = new Conexao();
         java.awt.Dimension d = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -513,11 +513,11 @@ public class TelaDeAssociacao extends JFrame {
     protected void btnAssocialosAction(Conexao conexao) {
 
         try {
-            String sql = "INSERT INTO \"AssociadosAsSalas\" (\"ID_UsuárioPK\",\"ID_SalaPK\")" + " VALUES ('"
+            String sql = "INSERT INTO associadosassalas (id_usuariopk,ID_SalaPK)" + " VALUES ('"
                     + textFieldAssociaUsuario.getText() + "', '" + textFieldAssociaSala.getText() + "')";
 
             conexao.updateSql(sql);
-            JOptionPane.showMessageDialog(null, "Associação realizada com sucesso!");
+            JOptionPane.showMessageDialog(null, "Associa��o realizada com sucesso!");
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
@@ -550,7 +550,7 @@ public class TelaDeAssociacao extends JFrame {
 
     private void buscarUsuario(Conexao conexao) {
         try {
-            String sql = "SELECT * FROM \"Usuários\" WHERE \"Nome\" ~* '" + textBuscaUsuario.getText() + "'";
+            String sql = "SELECT * FROM usuarios WHERE Nome ~ '" + textBuscaUsuario.getText() + "'";
 
             rs = conexao.executeSql(sql);
             tableUsuarios.setModel(DbUtils.resultSetToTableModel(rs));
@@ -563,7 +563,7 @@ public class TelaDeAssociacao extends JFrame {
 
     private void atualizaTabelSalasDisponiveis(Conexao conexao) {
         try {
-            String sql = "SELECT * FROM \"Salas\" WHERE \"ID_Sala\" NOT IN (SELECT \"ID_SalaPK\" FROM \"AssociadosAsSalas\" )";
+            String sql = "SELECT * FROM Salas WHERE ID_Sala NOT IN (SELECT ID_SalaPK FROM AssociadosAsSalas)";
             rs = conexao.executeSql(sql);
             tableSalas.setModel(DbUtils.resultSetToTableModel(rs));
             rs.close();
@@ -574,7 +574,8 @@ public class TelaDeAssociacao extends JFrame {
 
     private void atualizaTabelaResponsaveis(Conexao conexao) {
         try {
-            String sql = "SELECT \"ID_Usuário\", \"Nome\", \"Nível de acesso\" FROM \"Usuários\" ";
+            String sql = "SELECT id_usuario,nome,nivel_acesso FROM usuarios";
+            
 
             rs = conexao.executeSql(sql);
             tableUsuarios.setModel(DbUtils.resultSetToTableModel(rs));
@@ -594,7 +595,7 @@ public class TelaDeAssociacao extends JFrame {
     }
 
     private void sair(Conexao conexao) {
-        if (JOptionPane.showConfirmDialog(null, "Você realmente deseja sair?", "Confirmação",
+        if (JOptionPane.showConfirmDialog(null, "Deseja realmente deseja sair?", "Confirma��o",
                 JOptionPane.YES_NO_OPTION) == 0) {
             conexao.fecharConexao();
             System.exit(0);
