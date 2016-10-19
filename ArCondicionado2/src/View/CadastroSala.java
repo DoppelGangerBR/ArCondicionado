@@ -68,10 +68,10 @@ public class CadastroSala extends JFrame {
 	 * Create the frame.
 	 */
 	public CadastroSala() {
-
+		
 		super("Nova sala ");
 		//conexao();
-
+		Conexao conexao = new Conexao();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 685, 463);
 		contentPane = new JPanel();
@@ -201,44 +201,23 @@ public class CadastroSala extends JFrame {
 	}
 
 	private void cadastrarSalas() {
-		try {
-			String sql = "INSERT INTO \"Salas\" (\"N° da sala\", \"Bloco\") VALUES( " + textFieldNSala.getText() + ", '"
-					+ textFielBloco.getText() + "')";
+	
+			String sql = "INSERT INTO salas(numero_sala,bloco) VALUES( " + textFieldNSala.getText() + ", '"	+ textFielBloco.getText() + "')";
+			
+			conexao.updateSql(sql);
+			
+			sql = "INSERT INTO ar_condicionado(temperatura) VALUES(0)";
+			conexao.updateSql(sql);
 
-			prs = con.prepareStatement(sql);
-			prs.executeUpdate();
-			prs.close();
-
-		} catch (SQLException e) {
-
-			try {
-				prs.close();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			e.printStackTrace();
-		}
-		try {
-			String SQL = "INSERT INTO \"Ar Condicionado\" (\"Temperatura\") VALUES(0)";
-
-			prs = con.prepareStatement(SQL);
-			prs.executeUpdate();
-			prs.close();
-
-			String sql = "INSERT INTO \"Sensores\" (\"N° do sensor\", \"N° do sensor 2\", \"N° do sensor 3\") VALUES( "
+			sql = "INSERT INTO Sensores (id_sensor1, id_sensor2,id_sensor3) VALUES( "
 					+ textFieldNDoSensor1.getText() + ", " + textFieldNDoSensor2.getText() + ", "
 					+ textFieldNDoSensor3.getText() + " )";
 
-			prs = con.prepareStatement(sql);
-			prs.executeUpdate();
-
+			conexao.updateSql(sql);
+			conexao.fecharConexao();
 			JOptionPane.showMessageDialog(null, "Sala cadastrada com sucesso!");
-			prs.close();
+			
 
-		} catch (SQLException e) {
-
-			JOptionPane.showMessageDialog(null, "Não foi possível cadastrar sala ! \n" + e);
-		}
 
 	}
 
@@ -246,12 +225,10 @@ public class CadastroSala extends JFrame {
 		sair();
 	}
 
-	private void sair() {
-		try {
-			con.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	private void sair() {		
+			conexao.fecharConexao();
+			dispose();
+		
 		dispose();
 
 	}

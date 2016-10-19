@@ -155,7 +155,7 @@ public class TelaDeCadastramentoUsuario extends JFrame {
 		try {
 			String sql = "INSERT INTO usuarios(nome,login,senha,nivel_acesso) VALUES('"+textFieldNome.getText()+"','"+textFieldLogin.getText()+"','"+String.valueOf(passwordFieldSenha.getPassword())+"','"+nivel+"')";
 
-			conexao.executeSql(sql);
+			conexao.updateSql(sql);
 			JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Não foi possível cadastrar um novo usuário!\n" + e);

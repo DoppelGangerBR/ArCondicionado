@@ -681,10 +681,7 @@ public class TelaSalasAssociadas extends JFrame {
 
 	private void setValoresSelecionadosNaTabelaParaCampos(Conexao conexao) {
 		try {
-			String sql = "SELECT \"N° do sensor\",\"Temperatura\",\"Ventilação\",\"N° do sensor 2\",\"N° do sensor 3\""
-					+ " FROM \"Salas\",\"Ar Condicionado\",\"Sensores\" "
-					+ " WHERE \"ID_Ar\" = \"ID_Sala\" AND \"ID_Ar\" = \"ID_Sensor\" AND \"ID_Sala\" = "
-					+ table.getValueAt(table.getSelectedRow(), 0);
+			String sql = "SELECT id_sensor1,id_sensor2,id_sensor3,temperatura,ventilacao, FROM salas,ar_condicionado,sensores WHERE id_ar = id_sala AND id_ar = id_sensor AND id_sala = "+ table.getValueAt(table.getSelectedRow(), 0);
 
 			rs = conexao.executeSql(sql);
 
