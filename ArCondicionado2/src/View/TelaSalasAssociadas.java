@@ -34,6 +34,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import Model.Conexao;
+import Model.ConexaoComArduino;
 import net.proteanit.sql.DbUtils;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
@@ -403,17 +404,17 @@ public class TelaSalasAssociadas extends JFrame {
 				new Color(0, 153, 51), new Color(0, 153, 51)));
 		txtFildSensor2.setColumns(10);
 
-		JLabel lbl_1_sensor = new JLabel("1\u00B0 Sensor :");
+		JLabel lbl_1_sensor = new JLabel("Temperatura:");
 		lbl_1_sensor.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lbl_1_sensor.setBounds(62, 17, 110, 40);
 		panelControles.add(lbl_1_sensor);
 
-		JLabel lbl_2_sensor = new JLabel("2\u00B0 Sensor :");
+		JLabel lbl_2_sensor = new JLabel("Umidade:");
 		lbl_2_sensor.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lbl_2_sensor.setBounds(62, 86, 110, 40);
 		panelControles.add(lbl_2_sensor);
 
-		JLabel lblSensor = new JLabel("3\u00BA Sensor :");
+		JLabel lblSensor = new JLabel("Luminosidade:");
 		lblSensor.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblSensor.setBounds(62, 161, 110, 40);
 		panelControles.add(lblSensor);
@@ -624,7 +625,6 @@ public class TelaSalasAssociadas extends JFrame {
 	}
 
 	private void liberarSala(Conexao conexao) {
-
 		try {
 			String sql = "DELETE FROM \"AssociadosAsSalas\" WHERE \"ID_SalaPK\" = '" + textFieldLiberarSala.getText()
 					+ "'";
@@ -928,7 +928,44 @@ public class TelaSalasAssociadas extends JFrame {
 				JOptionPane.YES_NO_OPTION) == 0) {
 			conexao.fecharConexao();
 			System.exit(1);
-
 		}
 	}
+	public class AtualizaTabela extends Thread{
+		private double temperatura, umidade, luminosidade;
+		
+		@Override
+		public void run(){
+			ConexaoComArduino arduino = new ConexaoComArduino();
+			while(true){
+				try{
+					Thread.sleep(1000);
+					txtFildSensor1.setText(Double.toString(getTemperatura()));
+					txtFildSensor2.setText(Double.toString(getUmidade()));
+					txtFildSensor3.setText(Double.toString(getLuminosidade()));					
+				}catch(InterruptedException e){
+					
+				}
+			}
+		}
+		public void setTemperatura(double temp){
+			this.temperatura = temp;
+		}
+		public double getTemperatura(){
+			return temperatura;
+		}
+		public void setUmidade(double umid){
+			this.umidade = umid;
+		}
+		public double getUmidade(){
+			return umidade;
+		}
+		public void setLuminosidade(double lumi){
+			this.luminosidade = lumi;
+		}
+		public double getLuminosidade(){
+			return luminosidade;
+		}
+	}
+	
 }
+

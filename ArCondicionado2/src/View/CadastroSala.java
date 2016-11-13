@@ -31,18 +31,14 @@ public class CadastroSala extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	Conexao conexao = null;
+	Conexao conexao = new Conexao();
 	private JPanel contentPane;
 	private JTextField textFieldNSala;
 	private JTextField textFielBloco;
 	private JLabel lblNomeDaSala;
 	private JLabel lblBloco;
-	private JLabel lblCodigo;
 	private JLabel lblTipo;
-	private JLabel lblMarca;
 	private JTextField textFieldNDoSensor1;
-	private JTextField textFieldNDoSensor2;
-	private JTextField textFieldNDoSensor3;
 	private JButton btnCadastrar;
 	private JButton btn_sair;
 	private Connection con;
@@ -106,20 +102,10 @@ public class CadastroSala extends JFrame {
 		lblBloco.setBounds(186, 83, 129, 33);
 		contentPane.add(lblBloco);
 
-		lblCodigo = new JLabel("N\u00B0 do sensor 2 :");
-		lblCodigo.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblCodigo.setBounds(186, 173, 129, 33);
-		contentPane.add(lblCodigo);
-
-		lblTipo = new JLabel("N\u00B0 do sensor 1 :");
+		lblTipo = new JLabel("IP Arduino:");
 		lblTipo.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblTipo.setBounds(186, 128, 129, 33);
 		contentPane.add(lblTipo);
-
-		lblMarca = new JLabel("N\u00B0 do sensor 3 :");
-		lblMarca.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblMarca.setBounds(186, 217, 129, 33);
-		contentPane.add(lblMarca);
 
 		textFieldNDoSensor1 = new JTextField();
 		textFieldNDoSensor1.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -128,22 +114,6 @@ public class CadastroSala extends JFrame {
 				new Color(0, 153, 51), new Color(0, 153, 51)));
 		textFieldNDoSensor1.setColumns(10);
 		contentPane.add(textFieldNDoSensor1);
-
-		textFieldNDoSensor2 = new JTextField();
-		textFieldNDoSensor2.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		textFieldNDoSensor2.setBounds(325, 172, 260, 33);
-		textFieldNDoSensor2.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 153, 51), new Color(0, 153, 51),
-				new Color(0, 153, 51), new Color(0, 153, 51)));
-		textFieldNDoSensor2.setColumns(10);
-		contentPane.add(textFieldNDoSensor2);
-
-		textFieldNDoSensor3 = new JTextField();
-		textFieldNDoSensor3.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		textFieldNDoSensor3.setBounds(325, 217, 260, 33);
-		textFieldNDoSensor3.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 153, 51), new Color(0, 153, 51),
-				new Color(0, 153, 51), new Color(0, 153, 51)));
-		textFieldNDoSensor3.setColumns(10);
-		contentPane.add(textFieldNDoSensor3);
 
 		btnCadastrar = new JButton("Cadastrar ");
 		btnCadastrar.addActionListener(new ActionListener() {
@@ -203,15 +173,13 @@ public class CadastroSala extends JFrame {
 	private void cadastrarSalas() {
 	
 			String sql = "INSERT INTO salas(numero_sala,bloco) VALUES( " + textFieldNSala.getText() + ", '"	+ textFielBloco.getText() + "')";
-			
 			conexao.updateSql(sql);
 			
 			sql = "INSERT INTO ar_condicionado(temperatura) VALUES(0)";
 			conexao.updateSql(sql);
 
-			sql = "INSERT INTO Sensores (id_sensor1, id_sensor2,id_sensor3) VALUES( "
-					+ textFieldNDoSensor1.getText() + ", " + textFieldNDoSensor2.getText() + ", "
-					+ textFieldNDoSensor3.getText() + " )";
+			sql = "INSERT INTO Sensores (ip_arduino) VALUES('"
+					+ textFieldNDoSensor1.getText() + "')";
 
 			conexao.updateSql(sql);
 			conexao.fecharConexao();
