@@ -226,7 +226,6 @@ public class CadastroSala extends JFrame {
 	}
 
 	private void sair() {		
-			conexao.fecharConexao();
 			dispose();
 		
 		dispose();
