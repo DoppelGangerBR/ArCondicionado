@@ -8,6 +8,9 @@ import javax.swing.JScrollPane;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
+
+import DAO.arduinoConexao;
+
 import javax.swing.JMenuBar;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -40,6 +43,8 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import javax.swing.table.DefaultTableModel;
 
 public class TelaSalasAssociadas extends JFrame {
 
@@ -318,7 +323,12 @@ public class TelaSalasAssociadas extends JFrame {
 		btnAumentarTemperatura.setForeground(Color.BLACK);
 		btnAumentarTemperatura.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnAumentarTemperaturaAction(conexao);
+				try {
+					btnAumentarTemperaturaAction(conexao);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnAumentarTemperatura.setBounds(575, 57, 51, 33);
@@ -343,7 +353,12 @@ public class TelaSalasAssociadas extends JFrame {
 		btnDiminuirTemperatura.setForeground(Color.BLACK);
 		btnDiminuirTemperatura.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnDiminuirTemperaturaAction(conexao);
+				try {
+					btnDiminuirTemperaturaAction(conexao);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnDiminuirTemperatura.setBounds(403, 57, 51, 33);
@@ -459,28 +474,6 @@ public class TelaSalasAssociadas extends JFrame {
 		tglbtnAutoBlowing.setBackground(new Color(0, 153, 51));
 		tglbtnAutoBlowing.setBounds(691, 107, 283, 40);
 		panelControles.add(tglbtnAutoBlowing);
-
-		JToggleButton tglbtnOnOff = new JToggleButton("Ligar");
-		tglbtnOnOff.setBounds(63, 333, 222, 40);
-		contentPane.add(tglbtnOnOff);
-		tglbtnOnOff.setFont(new Font("Tahoma", Font.BOLD, 18));
-		tglbtnOnOff.setBackground(new Color(0, 153, 51));
-		tglbtnOnOff.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 153, 51), new Color(0, 153, 51),
-				new Color(0, 153, 51), new Color(0, 153, 51)));
-		tglbtnOnOff.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				if (tglbtnOnOff.isSelected() == true) {
-					tglbtnOnAction(conexao);
-					getRootPane().dispatchEvent(e);
-				} else if (tglbtnOnOff.isSelected() == false) {
-					tglbtnOffAction(conexao);
-					getRootPane().dispatchEvent(e);
-				}
-				atualizarTabelaDoAr(conexao);
-			}
-		});
-		tglbtnOnOff.setForeground(new Color(0, 0, 0));
 
 		textBusca = new JTextField();
 		textBusca.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -598,6 +591,47 @@ public class TelaSalasAssociadas extends JFrame {
 						new Color(0, 153, 51), new Color(0, 153, 51)));
 		textFieldLiberarSala.setBounds(63, 560, 222, 28);
 		contentPane.add(textFieldLiberarSala);
+		
+		JButton btnLiga = new JButton("Ligar");
+		btnLiga.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				arduinoConexao ligaDesliga = new arduinoConexao();
+				String ip = table.getValueAt(table.getSelectedRow(), 7).toString();
+				//JOptionPane.showMessageDialog(null, "IP: "+ip);
+				try {
+					ligaDesliga.setIp(ip);
+					ligaDesliga.EnviaComandosArduino("/ligar");
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}					
+				
+			}
+		});
+		btnLiga.setFont(new Font("Tahoma", Font.BOLD, 18));
+		btnLiga.setBounds(63, 333, 86, 40);
+		contentPane.add(btnLiga);
+		
+		JButton btnDesliga = new JButton("Desligar");
+		btnDesliga.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				arduinoConexao ligaDesliga = new arduinoConexao();
+				String ip = table.getValueAt(table.getSelectedRow(), 7).toString(); 
+				//JOptionPane.showMessageDialog(null, "IP: "+ip);
+				try {
+					ligaDesliga.setIp(ip);
+					ligaDesliga.EnviaComandosArduino("/Desligar");
+					btnLiga.setText("Ligar");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		btnDesliga.setFont(new Font("Tahoma", Font.BOLD, 18));
+		btnDesliga.setBounds(159, 333, 112, 40);
+		contentPane.add(btnDesliga);
 
 		UIManager.put("Button.defaultButtonFollowsFocus", Boolean.TRUE);
 		java.net.URL url = this.getClass().getResource("imgs/Logo_1.png");
@@ -710,10 +744,35 @@ public class TelaSalasAssociadas extends JFrame {
 
 	private void atualizarTabelaDoAr(Conexao conexao) {
 		try {
-			String sql = "SELECT id_sala,numero_sala,bloco,temperatura,auto_blowing,turbo,ventilacao FROM salas,ar_condicionado,associadosassalas WHERE id_ar = id_sala AND id_sala = id_salapk";
-
+			String sql = "SELECT id_sala,numero_sala,bloco,temperatura,auto_blowing,turbo,ventilacao,ip_arduino FROM salas,ar_condicionado,associadosassalas WHERE id_ar = id_sala AND id_sala = id_salapk";
+			DefaultTableModel dm = new DefaultTableModel();
+			//Colunas: "id_sala", "numero_sala", "bloco", "temperatura", "auto_blowing", "turbo", "ventilacao", "IP"
+			dm.addColumn("ID Sala");
+			dm.addColumn("Numero da sala");
+			dm.addColumn("Bloco");
+			dm.addColumn("Temperatura");
+			dm.addColumn("Auto Blowing");
+			dm.addColumn("Turbo");
+			dm.addColumn("Ventilação");
+			dm.addColumn("IP");
 			rs = conexao.executeSql(sql);
-			table.setModel(DbUtils.resultSetToTableModel(rs));
+			while(rs.next()){
+				String id_sala = rs.getString(1);
+				String num_sala = rs.getString(2);
+				String bloco = rs.getString(3);
+				String temp = rs.getString(4);
+				String blowing = rs.getString(5);
+				String turbo = rs.getString(6);
+				String ventilacao = rs.getString(7);
+				String ip = rs.getString(8);
+				dm.addRow(new String[]{id_sala,num_sala,bloco,temp,blowing,turbo,ventilacao,ip});
+			}
+			table.setModel(dm);			
+			table.getColumnModel().getColumn(0).setPreferredWidth(50);
+			table.getColumnModel().getColumn(0).setMinWidth(13);
+			table.getColumnModel().getColumn(1).setPreferredWidth(72);
+			table.getColumnModel().getColumn(2).setPreferredWidth(58);
+			table.getColumnModel().getColumn(7).setPreferredWidth(100);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -752,13 +811,15 @@ public class TelaSalasAssociadas extends JFrame {
 		atualizarTabelaDoAr(conexao);
 	}
 
-	private void btnDiminuirTemperaturaAction(Conexao conexao) {
-		//Model.ConexaoComArduino.enviarDados(diminuirTemperatura);
+	private void btnDiminuirTemperaturaAction(Conexao conexao) throws IOException {
+		arduinoConexao diminuirTemperatura = new arduinoConexao();
+		diminuirTemperatura.EnviaComandosArduino("/diminuir");
 		atualizarTabelaDoAr(conexao);
 	}
 
-	private void btnAumentarTemperaturaAction(Conexao conexao) {
-		//Model.ConexaoComArduino.enviarDados(aumentarTemperatura);
+	private void btnAumentarTemperaturaAction(Conexao conexao) throws IOException {
+		arduinoConexao aumentaTemperatura = new arduinoConexao();
+		aumentaTemperatura.EnviaComandosArduino("/aumentar");
 		atualizarTabelaDoAr(conexao);
 	}
 
@@ -966,6 +1027,5 @@ public class TelaSalasAssociadas extends JFrame {
 			return luminosidade;
 		}
 	}
-	
 }
 

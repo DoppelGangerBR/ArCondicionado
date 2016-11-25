@@ -171,15 +171,15 @@ public class CadastroSala extends JFrame {
 	}
 
 	private void cadastrarSalas() {
-	
+			String ip = "http://"+textFieldNDoSensor1.getText();
 			String sql = "INSERT INTO salas(numero_sala,bloco) VALUES( " + textFieldNSala.getText() + ", '"	+ textFielBloco.getText() + "')";
 			conexao.updateSql(sql);
 			
 			sql = "INSERT INTO ar_condicionado(temperatura) VALUES(0)";
 			conexao.updateSql(sql);
 
-			sql = "INSERT INTO Sensores (ip_arduino) VALUES('"
-					+ textFieldNDoSensor1.getText() + "')";
+			sql = "INSERT INTO salas (ip_arduino) VALUES('"
+					+ ip + "')";
 
 			conexao.updateSql(sql);
 			conexao.fecharConexao();
