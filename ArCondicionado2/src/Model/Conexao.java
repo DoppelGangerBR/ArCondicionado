@@ -2,6 +2,8 @@ package Model;
 
 import java.sql.*;
 
+import javax.swing.JOptionPane;
+
 public class Conexao {
 	private Connection con;
 	private PreparedStatement prs;
@@ -31,12 +33,7 @@ public class Conexao {
 			prs = con.prepareStatement(sql);
 			prs.executeUpdate();
 		} catch (SQLException e) {
-			try {
-				prs.close();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "ERRO AO INSERIR DADOS");
 		}
 	}
 

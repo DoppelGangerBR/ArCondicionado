@@ -172,24 +172,13 @@ public class CadastroSala extends JFrame {
 
 	private void cadastrarSalas() {
 			String ip = "http://"+textFieldNDoSensor1.getText();
-			String sql = "INSERT INTO salas(numero_sala,bloco) VALUES( " + textFieldNSala.getText() + ", '"	+ textFielBloco.getText() + "')";
-			conexao.updateSql(sql);
-			
-			sql = "INSERT INTO ar_condicionado(temperatura) VALUES(0)";
-			conexao.updateSql(sql);
-
-			sql = "INSERT INTO salas (ip_arduino) VALUES('"
-					+ ip + "')";
-
-			conexao.updateSql(sql);
-			conexao.fecharConexao();
+			String sql = "INSERT INTO salas(numero_sala,bloco,ip_arduino) VALUES( " + textFieldNSala.getText() + ", '"	+ textFielBloco.getText() + "','"+ip+"')";
+			conexao.updateSql(sql);			
 			JOptionPane.showMessageDialog(null, "Sala cadastrada com sucesso!");
-			
-
-
-	}
+			}
 
 	protected void btn_sairAction(ActionEvent evt) {
+		conexao.fecharConexao();
 		sair();
 	}
 

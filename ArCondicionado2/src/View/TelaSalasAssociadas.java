@@ -596,17 +596,14 @@ public class TelaSalasAssociadas extends JFrame {
 		btnLiga.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				arduinoConexao ligaDesliga = new arduinoConexao();
-				String ip = table.getValueAt(table.getSelectedRow(), 7).toString();
-				//JOptionPane.showMessageDialog(null, "IP: "+ip);
+				String ip = table.getValueAt(table.getSelectedRow(), 7).toString();				
 				try {
 					ligaDesliga.setIp(ip);
-					ligaDesliga.EnviaComandosArduino("/ligar");
-					
+					ligaDesliga.EnviaComandosArduino("/Ligar");					
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null, "Erro ao acessar o IP: "+ip);
 					e.printStackTrace();
-				}					
-				
+				}				
 			}
 		});
 		btnLiga.setFont(new Font("Tahoma", Font.BOLD, 18));
